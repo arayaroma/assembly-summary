@@ -1,0 +1,209 @@
+\documentclass{article}
+\usepackage[a4paper, hmargin=1.4in, vmargin=1in]{geometry}
+\usepackage{multicol}
+
+\title{\LARGE\textbf{Registros y Segmentos}}
+\author{\large\textit{Daniel Araya Román}}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Visi\'{o}n General}
+Las estructuras de datos que se utilizan en ensamblador
+corresponden a las estructuras f\'{i}sicas de los registros
+de la memoria principal. Sus instrucciones tienen una relaci\'{o}n
+directa y un\'{i}voca con las intrucciones del lenguaje m\'{a}quina.
+\medbreak
+
+\begin{multicols}{2}
+    \subsection*{\hspace*{1cm} Ventajas}
+    \begin{itemize}
+        \item \textbf{Velocidad}: Los registros son los dispositivos
+              de almacenamiento directamente del procesador.
+
+        \item \textbf{Flexibilidad}: Los registros pueden ser utilizados
+              para almacenar cualquier tipo de dato.
+
+        \item \textbf{Rutinas Optimizadas}: Las rutinas de ensamblador
+              naturalmente est\'{a}n optimizadas para trabajar con registros.
+
+        \item \textbf{Control absoluto del PC}: El programador tiene
+              control absoluto sobre el PC, lo que permite optimizar el
+              flujo de ejecuci\'{o}n del programa.
+    \end{itemize}
+    \columnbreak
+
+    \subsection*{\hspace*{1cm} Desventajas}
+    \begin{itemize}
+        \item \textbf{Tiempo de programaci\'{o}n}: El tiempo de programaci\'{o}n
+              es mayor que en lenguajes de alto nivel.
+
+        \item \textbf{C\'{o}digo fuente extenso}: El c\'{o}digo fuente es
+              extenso y dif\'{i}cil de leer.
+
+        \item \textbf{Dependencia de la arquitectura}: El c\'{o}digo fuente
+              depende de la arquitectura del procesador, por lo que no es
+              portable.
+
+        \item \textbf{Afectar recursos del sistema}: El programador debe
+              tener cuidado de no afectar recursos del sistema.
+    \end{itemize}
+\end{multicols}
+
+\section*{Segmentos}
+Es un bloque de memoria designado a un programa, que puede estar ubicado
+en cualquier parte de la memoria principal. S\'{o}lo necesita tanto espacio
+como el programa requiera para su ejecuci\'{o}n. Se puede tener cualquier
+n\'{u}mero de segmentos en memoria. Los segmentos principales son, \textbf{el segmento
+de c\'{o}digo, el segmento de datos y el segmento de pila.}
+
+\subsection*{Segmento de C\'{o}digo}
+El \textbf{\textit{registro CS}}, direcciona este segmento, por medio de la primera instrucci\'{o}n
+ejecutable del programa, que se encuentra al inicio del mismo. El segmento de c\'{o}digo
+contiene las instrucciones para la ejecuci\'{o}n del programa. El sistema operativo enlaza esa
+localidad, para iniciar la ejecuci\'{o}n del programa.
+
+\subsection*{Segmento de Datos}
+El \textbf{\textit{registro DS}}, direcciona este segmento, que contiene las variables y constantes
+del programa. El segmento de datos es de lectura y escritura, por lo que se pueden modificar los
+valores de las variables y constantes.
+
+\subsection*{Segmento de Pila}
+El \textbf{\textit{registro SS}}, direcciona este segmento, almacena las direcciones y los valores
+de manera temporal, para el uso de las rutinas del programa. El segmento de pila es de lectura y
+escritura, por lo que se pueden modificar los valores de las direcciones y los valores de la pila.
+
+\section*{Registros del Procesador}
+\begin{multicols}{2}
+    \subsection*{Registros de Segmento}
+    \begin{itemize}
+        \item \textbf{CS}: \textit{Code Segment}
+        \item \textbf{DS}: \textit{Data Segment}.
+        \item \textbf{SS}: \textit{Stack Segment}.
+        \item \textbf{ES}: \textit{Extra Segment (ES)}.
+        \item \textbf{FS}: \textit{Extra Segment (FS)}.
+        \item \textbf{GS}: \textit{Extra Segment (GS)}.
+    \end{itemize}
+    \vphantom{}
+    \columnbreak
+
+    \subsection*{Registros de Prop\'{o}sito General}
+    \begin{itemize}
+        \item \textbf{AX}: \textit{Accumulator}.
+        \item \textbf{BX}: \textit{Base}.
+        \item \textbf{CX}: \textit{Counter}.
+        \item \textbf{DX}: \textit{Data}.
+    \end{itemize}
+    \vphantom{}
+\end{multicols}
+
+\begin{multicols}{2}
+    \subsection*{Registros apuntadores de \'{i}ndice}
+    \begin{itemize}
+        \item \textbf{SI}: \textit{Source Index}.
+        \item \textbf{DI}: \textit{Destination Index}.
+    \end{itemize}
+    \vphantom{}
+    \columnbreak
+
+    \subsection*{Registros apuntadores de pila}
+    \begin{itemize}
+        \item \textbf{SP}: \textit{Stack Pointer}.
+        \item \textbf{BP}: \textit{Base Pointer}.
+    \end{itemize}
+    \vphantom{}
+\end{multicols}
+
+\subsection*{Registro CS}
+\textit{\textbf{DOS}} almacena la direcci\'{o}n de la primera instrucci\'{o}n ejecutable
+del programa en el registro \textbf{CS}. Junto al registro \textbf{IP, registro apuntador
+de instrucci\'{o}n}, indica la direcci\'{o}n de la siguiente instrucci\'{o}n a ser buscada
+para su ejecuci\'{o}n.
+
+\subsection*{Registro DS}
+\textit{\textbf{DOS}} almacena la direcci\'{o}n del segmento de datos en el registro \textbf{DS}.
+El registro \textbf{DS} direcciona el segmento de datos, que contiene las variables y constantes
+del programa. M\'{a}s un valor de desplazamiento, direcciona una referencia a un
+\textit{byte (8-bit)} en espec\'{i}fico dentro del segmento de datos.
+
+\subsection*{Registro SS}
+\textit{\textbf{DOS}} almacena la direcci\'{o}n del segmento de pila en el registro \textbf{SS}.
+El registro \textbf{SS} direcciona el segmento de pila, m\'{a}s un valor de desplazamiento del
+registro \textbf{SP}, direcciona una referencia a un \textit{word (16-bit)} en espec\'{i}fico
+dentro del segmento de pila que est\'{a} siendo direccionado.
+
+\subsection*{Registro IP}
+\textit{\textbf{DOS}} almacena la direcci\'{o}n de la siguiente instrucci\'{o}n a ser ejecutada
+en el registro \textbf{IP}. Est\'{a} asociado al registro \textbf{CS}, el IP indica la direcci\'{o}n
+de la instrucci\'{o}n actual en el segmento de c\'{o}digo, que se est\'{a} ejecutando.
+
+\subsection*{Registro apuntadores de \'{i}ndice}
+Los registros \textbf{SI} y \textbf{DI} son registros de \'{i}ndice de 16 bits, que se utilizan
+para direccionamiento indexado. Ambos se pueden realizar operaciones de cadenas de caracteres,
+el registro \textbf{SI}  est\'{a} relacionado con el registro \textbf{DS}, mientras que el
+registro \textbf{DI} est\'{a} relacionado con el registro \textbf{ES}.
+
+\subsection*{Registro Generales}
+Los registros \textbf{AX}, \textbf{BX}, \textbf{CX} y \textbf{DX} son registros de prop\'{o}sito
+general de 16 bits. Estos registros se pueden utilizar para almacenar datos, realizar operaciones
+aritm\'{e}ticas y l\'{o}gicas, y direccionamiento de memoria.
+
+\subsubsection*{Registro AX}
+El registro \textbf{AX} es el registro acumulador de 16 bits. Se utiliza para operaciones de entrada
+y salida, y para operaciones aritm\'{e}ticas y l\'{o}gicas.
+
+\subsubsection*{Registro BX}
+El registro \textbf{BX} es el registro base de 16 bits. Es el \'{u}nico registro de prop\'{o}sito
+general que puede ser utilizado para direccionamiento indexado. Se utiliza para operaciones
+aritm\'{e}ticas y l\'{o}gicas.
+
+\subsubsection*{Registro CX}
+El registro \textbf{CX} es el registro contador de 16 bits. Se utiliza para contar iteraciones
+en ciclos, y para operaciones aritm\'{e}ticas y l\'{o}gicas.
+
+\subsubsection*{Registro DX}
+El registro \textbf{DX} es el registro de datos de 16 bits. Se utiliza para operaciones de entrada
+y salida, y para operaciones aritm\'{e}ticas y l\'{o}gicas.
+
+\subsection*{Registro apuntadores de pila}
+Los registros \textbf{SP} y \textbf{BP} son registros de prop\'{o}sito general de 16 bits. Estos
+registros se utilizan para direccionamiento de memoria, y para direccionamiento de pila.
+
+\subsubsection*{Registro SP y BP}
+Los registros \textbf{SP} y \textbf{BP} son registros de prop\'{o}sito general de 16 bits. Estos
+registros se utilizan para direccionamiento de memoria, y para direccionamiento de pila.
+
+\subsection*{Registro de \textit{banderas}}
+El registro \textbf{FLAGS} es un registro de 16 bits, que contiene los \textit{bits} de estado
+del procesador. Estos \textit{bits} de estado se utilizan para indicar el resultado de una
+operaci\'{o}n aritm\'{e}tica o l\'{o}gica, y para controlar el funcionamiento del procesador.
+
+\begin{flushleft}
+    La siguiente tabla muestra los \textit{bits} de estado del registro \textbf{FLAGS}.
+\end{flushleft}
+\medbreak
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Bit} & \textbf{Nombre} & \textbf{Descripci\'{o}n}      & \textbf{Bit} & \textbf{Nombre} & \textbf{Descripci\'{o}n}       \\
+    \hline
+    0            & CF              & \textit{Carry Flag}           & 8            & OF              & \textit{Overflow Flag}         \\
+    \hline
+    1            &                 &                               & 9            & DF              & \textit{Direction Flag}        \\
+    \hline
+    2            & PF              & \textit{Parity Flag}          & 10           & IF              & \textit{Interrupt Enable Flag} \\
+    \hline
+    3            &                 &                               & 11           & TF              & \textit{Trap Flag}             \\
+    \hline
+    4            & AF              & \textit{Auxiliary Carry Flag} & 12           & SF              & \textit{Sign Flag}             \\
+    \hline
+    5            &                 &                               & 13           & ZF              & \textit{Zero Flag}             \\
+    \hline
+    6            & ZF              & \textit{Zero Flag}            & 14           &                 &                                \\
+    \hline
+    7            & SF              & \textit{Sign Flag}            & 15           &                 &                                \\
+    \hline
+\end{tabular}
+
+
+\end{document}

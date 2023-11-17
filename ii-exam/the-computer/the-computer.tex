@@ -1,0 +1,160 @@
+\documentclass{article}
+\usepackage[a4paper, hmargin=1.4in, vmargin=1in]{geometry}
+\usepackage{graphicx}
+
+\title{\LARGE\textbf{El Computador}}
+\author{\large\textit{Daniel Araya Román}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Arquitectura de Von Neumann}
+Los computadores actuales se han basado en el dise\~{n}o de la
+arquitectura de Von Neumann, la cual se caracteriza por tener una
+estructura de almacenamiento de datos y programas en una misma memoria,
+y una unidad de procesamiento que ejecuta instrucciones almacenadas en
+la memoria. Esta arquitectura se puede ver en la figura 1.
+
+\subsection*{Hardware y Software}
+Para poder crear un c\'{a}lculo concreto se necesita de una configuraci\'{o}n
+de componentes l\'{o}gicos dise\~{n}ados para dicho c\'{a}lculo. Como si se
+tratase del proceso de conexi\'{o}n de diversos componentes para as\'{i}
+obtener la configuraci\'{o}n deseada. A esta configuraci\'{o}n se le conoce
+vagamente como \textbf{Hardware}. El cu\'{a}l realiza funciones respecto a las
+distintas se\~{n}ales de control que recibe.
+
+En contraparte, el conjunto de instrucciones que se le dan se\~{n}ales de control
+al hardware para que realice una tarea espec\'{i}fica se denomina como
+\textbf{Software}. Estas instrucciones se pueden almacenar en la memoria del
+computador, y se pueden modificar para as\'{i} obtener distintos resultados.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{von_neumann.png}
+    \caption{Arquitectura de Von Neumann.}
+\end{figure}
+
+Por lo tanto, se puede deducir que la funci\'{o}n b\'{a}sica de un computador es
+la ejecuci\'{o}n de un programa, el cu\'{a}l se encuentra en un conjunto de
+instrucciones almacenadas en la memoria.
+\newpage
+
+\section*{Componentes del Computador}
+
+\subsection*{Unidad Central de Procesamiento (CPU)}
+El objetivo principal del procesador es ejecutar las instrucciones almacenadas en
+la memoria. Est\'{a} compuesta por la Unidad Aritm\'{e}tico L\'{o}gica (ALU),
+el Contador de Programa (PC), el Registro de Instrucci\'{o}n (IR) y la Unidad de
+Control (CU), los registros de prop\'{o}sito general, el Registro de Direcci\'{o}n
+de Memoria (MAR), el Registro de Datos de Memoria (MDR) y el Acumulador.
+
+\subsubsection*{Unidad Aritmético Lógica (ALU)}
+La ALU es la encargada de realizar las operaciones aritm\'{e}ticas y l\'{o}gicas
+de los datos que se encuentran en el acumulador y en los registros de prop\'{o}sito
+general. Estas operaciones se realizan mediante se\~{n}ales de control que se
+encuentran en la Unidad de Control (CU).
+
+\subsubsection*{Contador de Programa (PC)}
+El PC es un registro que contiene la direcci\'{o}n de la siguiente instrucci\'{o}n
+a ejecutar. Esta direcci\'{o}n se incrementa en una unidad cada vez que se ejecuta
+una instrucci\'{o}n.
+
+\subsubsection*{Registro de Instrucción (IR)}
+El IR es un registro que contiene la instrucci\'{o}n que se est\'{a} ejecutando en
+ese momento. Esta instrucci\'{o}n se obtiene de la memoria principal, y se almacena
+en el IR para que la CU pueda decodificarla y as\'{i} ejecutarla.
+
+\subsubsection*{Unidad de Control (CU)}
+La CU es la encargada de decodificar las instrucciones que se encuentran en el IR,
+y as\'{i} enviar las se\~{n}ales de control necesarias para que la ALU pueda realizar
+las operaciones aritm\'{e}ticas y l\'{o}gicas, y para que el PC pueda incrementar
+su valor en una unidad.
+
+\subsubsection*{Registro de Dirección de Memoria (MAR)}
+El MAR es un registro que contiene la direcci\'{o}n de memoria de la instrucci\'{o}n
+que se encuentra en el IR. Esta direcci\'{o}n se obtiene de la memoria principal, y
+se almacena en el MAR para que la CU pueda decodificarla y as\'{i} ejecutarla.
+
+\subsubsection*{Registro de Datos de Memoria (MDR)}
+El MDR es un registro que contiene el dato que se encuentra en la direcci\'{o}n de
+memoria que se encuentra en el MAR. Este dato se obtiene de la memoria principal, y
+se almacena en el MDR para que la CU pueda decodificarla y as\'{i} ejecutarla.
+
+\subsubsection*{Registros de propósito general}
+Los registros de prop\'{o}sito general son registros que contienen datos que se
+utilizan para realizar operaciones aritm\'{e}ticas y l\'{o}gicas. Estos registros
+se pueden utilizar para almacenar datos que se encuentran en la memoria principal,
+o para almacenar datos que se encuentran en el acumulador.
+
+\subsubsection*{Acumulador}
+El acumulador es un registro que contiene datos que se utilizan para realizar
+operaciones aritm\'{e}ticas y l\'{o}gicas. Este registro se puede utilizar para
+almacenar datos que se encuentran en la memoria principal, o para almacenar datos
+que se encuentran en los registros de prop\'{o}sito general.
+\newpage
+
+\section*{Funcionamiento del Computador}
+La ejeuci\'{o}n m\'{a}s b\'{a}sica de un computador se puede resumir en los siguientes
+pasos:
+
+\subsection*{Ciclo de instrucci\'{o}n}
+\begin{enumerate}
+
+    \item \textbf{Captaci\'{o}n de la instrucci\'{o}n}:
+          El procesador obtiene la instrucci\'{o}n desde la memoria principal
+          utilizando la dirección almacenada en el contador de programa (PC).
+
+    \item \textbf{Decodificaci\'{o}n de la instrucci\'{o}n}:
+          El procesador interpreta y decodifica la instrucción obtenida,
+          identificando la operación a realizar y los operandos involucrados.
+
+    \item \textbf{C\'{a}lculo de la direcci\'{o}n de memoria del operando}:
+          Se determina la dirección de memoria del operando, que puede ser necesario
+          para instrucciones que involucren acceso a datos en memoria.
+
+    \item \textbf{Captaci\'{o}n de operando}:
+          El procesador accede a la memoria para obtener los datos necesarios seg\'{u}n la
+          direcci\'{o}n calculada en el paso anterior y los coloca en registros internos,
+          como el Registro de Datos de Memoria (MDR).
+
+    \item \textbf{Ejecuci\'{o}n de la instrucci\'{o}n}:
+          El procesador realiza la operaci\'{o}n aritm\'{e}tica o l\'{o}gica que se
+          encuentra en el acumulador y en los registros de prop\'{o}sito general.
+
+    \item \textbf{Almacenamiento del resultado}:
+          El resultado de la operación se almacena, ya sea en registros internos o de nuevo
+          en la memoria, dependiendo de la naturaleza de la operaci\'{o}n y la arquitectura
+          del procesador.
+    \item \textbf{Termina la ejecuci\'{o}n de la instrucci\'{o}n}:
+          El procesador incrementa el valor del contador de programa (PC) en una unidad,
+          para as\'{i} poder ejecutar la siguiente instrucci\'{o}n.
+\end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{instruction_cycle.png}
+    \caption{Ciclo de instrucci\'{o}n.}
+\end{figure}
+
+\newpage
+
+\section*{Interrupciones}
+El procesador suspende temporalmente la ejecuci\'{o}n de un programa para atender una
+solicitud de servicio externo. Carga un nuevo valor en el contador de programa (PC)
+para que la ejecuci\'{o}n del programa de comienzo en una rutina de servicio de
+interrupci\'{o}n. Una vez que se ha atendido la solicitud, el procesador carga el valor
+del contador de programa (PC) que se encontraba antes de la interrupci\'{o}n, y as\'{i}
+contin\'{u}a la ejecuci\'{o}n del programa.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{interrupt.png}
+    \caption{Ciclo de instrucci\'{o}n con interrupciones.
+    \cite{stallings2006organización}}
+\end{figure}
+
+\bibliography{stallings}
+\bibliographystyle{plain}
+
+\end{document}

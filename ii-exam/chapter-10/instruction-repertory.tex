@@ -1,0 +1,245 @@
+\documentclass{article}
+\usepackage[a4paper, hmargin=1.4in, vmargin=1in]{geometry}
+\usepackage{graphicx}
+
+\title{\LARGE\textbf{Repertorios de Instrucciones: \\ 
+                     Carater\'{i}sticas y Funciones}}
+\author{\large\textit{Daniel Araya Román}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\subsection*{Elementos de una instrucci\'{o}n m\'{a}quina}
+Los elementos esenciales de las instrucciones de los computadores son,
+el c\'{o}digo de operaci\'{o}n \textbf{(codop)}. Referencias a operandos
+de origen y destino y referencia a la siguiente instrucci\'{o}n.
+Los operandos de origen, son valores de entrada para la operaci\'{o}n
+que se va a realizar. Los operandos de destino, son valores de salida
+de la operaci\'{o}n que se va a realizar.
+
+Es importante destacar que los operandos de origen y destino pueden ser
+almacenados en memoria principal o virtual, registros de la CPU o en
+dispositivos de entrada/salida.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{instruction_cycle.png}
+    \caption{Ciclo de una instrucci\'{o}n.
+    \cite {stallings2006organización}}
+\end{figure}
+
+\subsection*{Tipos de las Instrucciones}
+Un lenguaje de alto nivel, expresa las operaciones de forma concisa.
+Mientras que un lenguaje m\'{a}quina expresa las operaciones de una manera
+elemental. Es fundamental que el repertorio de instrucciones m\'{a}quina
+sea lo suficientemente rico para que se puedan expresar las operaciones
+de un lenguaje de alto nivel. Los tipos de instrucciones se pueden clasificar en:
+
+\begin{itemize}
+    \item \textbf{Transferencia de Datos:}
+          instrucciones de entrada y salida de datos.
+    \item \textbf{Almacenamiento de Datos:}
+          instrucciones de memoria.
+    \item \textbf{Procesamiento de Datos:}
+          instrucciones aritm\'{e}ticas y l\'{o}gicas.
+    \item \textbf{Control de Flujo}:
+          instrucciones de comprobaci\'{o}n y de bifurcaci\'{o}n.
+\end{itemize}
+
+\subsection*{Representaci\'{o}n de las Instrucciones}
+Dentro del computador cada instrucci\'{o}n se representa mediante una
+secuencia de bits. Dividida en campos correspondientes a los elementos
+que la constituyen. En la mayor\'{i}a de repertorios de instrucciones
+se utiliza m\'{a}s de un formato de instrucci\'{o}n. Durante la ejecuci\'{o}n
+del programa, la instrucci\'{o}n se almacena en el registro de instrucci\'{o}n
+(IR) de la CPU. La CPU extrae los campos de la instrucci\'{o}n y los
+utiliza para realizar la operaci\'{o}n correspondiente. Los c\'{o}digos de
+operaci\'{o}n (codop) se representan mediante abreviaturas denominadas
+\textbf{mnem\'{o}nicos}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{instruction_format.png}
+    \caption{Formato de una instrucci\'{o}n.
+    \cite {stallings2006organización}}
+\end{figure}
+
+\subsection*{N\'{u}mero de direcciones}
+La mayor\'{i}a de las instrucciones de los computadores actuales son
+una, dos o tres direcciones. Las instrucciones de tres direcciones
+no son comunes ya que requieren formatos relativamente largos.
+
+\begin{figure}[h]
+    \centering
+    \vspace{0.25cm}
+    \includegraphics[width=0.8\textwidth]{instruction_addressing.png}
+    \caption{N\'{u}mero de direcciones.
+    \cite {stallings2006organización}}
+\end{figure}
+
+\begin{flushleft}
+    La instrucci\'{o}n de una sola direcci\'{o}n es muy simple. Para que funcione,
+    una segunda direcci\'{o}n debe de estar impl\'{i}cita. Esto era usual en las
+    primeras m\'{a}quinas. La direcci\'{o}n impl\'{i}cita era un registro conocido
+    como el \textbf{acumulador (AC)}.
+\end{flushleft}
+Incluso es posible que una instrucci\'{o}n no tenga direcciones. Esto
+es logra utilizando la pila. El n\'{u}mero de direcciones es una decisi\'{o}n
+b\'{a}sica de dise\~{n}o. Menos direcciones significa instrucciones m\'{a}s primarias,
+lo que requiere un procesador menos complejo. Por otro lado, un mayor n\'{u}mero de
+direcciones significa instrucciones m\'{a}s complejas, pero menos instrucciones para
+realizar una tarea.
+
+\section*{Dise\~{n}o del Repertorio de Instrucciones}
+Es importante entender que \textbf{el repertorio de instrucciones es el medio que tiene
+    el programador para poder controlar el procesador.} En consecuencia debe de adaptarse
+a las necesidades del programador. Los aspectos fundamentales del dise\~{n}o del
+repertorio de instrucciones son.
+
+\begin{itemize}
+    \item \textbf{Repertorio de Operaciones:}
+          El repertorio de operaciones es el conjunto de operaciones que se
+          pueden realizar en el procesador. C\'{u}antas y cu\'{a}n complejas deben ser.
+    \item \textbf{Tipos de Datos:}
+          Los distintos tipos de datos que se pueden utilizar en las operaciones.
+    \item \textbf{Formatos de Instrucciones:}
+          Longitud de la instrucci\'{o}n (en bits), n\'{u}mero de direcciones,
+          tama\~{n}o de los campos, etc.
+    \item \textbf{Registros:} n\'{u}mero de registros del procesador que se
+          pueden referenciar por las instrucciones y el uso de ellos.
+    \item \textbf{Modos de direccionamiento:}
+          Los distintos modos de direccionamiento que puede especificarse la
+          direcci\'{o}n de un operando.
+\end{itemize}
+
+\subsection*{Tipos de operandos}
+Los operandos de una instrucci\'{o}n pueden ser de distintos tipos tales como:
+\textbf{direcciones}, \textbf{n\'{u}meros}, \textbf{caracteres} o
+\textbf{datos l\'{o}gicos}.
+
+\subsection*{Tipos de operaciones}
+Las operaciones que se pueden realizar en un procesador se pueden clasificar
+en la siguiente forma:
+
+\begin{itemize}
+    \item \textbf{Transferencia de datos:}
+          Mueven datos entre registros y memoria. Deben de especificarse
+          la direcci\'{o}n de origen y la direcci\'{o}n de destino. Que
+          podr\'{i}an ser de memoria, un registro, cabecera de la pila o
+          un dispositivo de entrada/salida. Indicarse la longitud de datos
+          a transferir. Especificar el modo de direccionamiento.
+
+    \item \textbf{Operaciones aritm\'{e}ticas:}
+          Realizan operaciones aritm\'{e}ticas sobre datos num\'{e}ricos.
+          Suma, resta, multiplicaci\'{o}n, divisi\'{o}n, etc.
+
+    \item \textbf{Operaciones l\'{o}gicas:}
+          Realizan operaciones l\'{o}gicas sobre datos l\'{o}gicos.
+          Manipulaci\'{o}n de bits, operaciones booleanas, desplazamiento,
+          rotaci\'{o}n, etc.
+
+    \item \textbf{Operaciones de conversi\'{o}n:}
+          Arquellas que cambian el formato de los datos. Conversi\'{o}n
+          binario a decimal, decimal a binario, etc.
+
+    \item \textbf{Operaciones de control del sistema:}
+          Realizan llamadas al sistema operativo, interrupciones.
+          Instrucciones privilegiadas, que solo pueden ser ejecutadas
+          por el sistema operativo.
+
+    \item \textbf{Operaciones de control de programa:}
+          Cambiar la secuencia de ejecuci\'{o}n de las instrucciones.
+          Saltos, bifurcaciones, llamadas a subrutinas, etc.
+\end{itemize}
+
+\subsection*{Instrucciones de bifurcaci\'{o}n}
+Las instrucciones de bifurcaci\'{o}n son aquellas que cambian la secuencia
+de ejecuci\'{o}n de las instrucciones. Las instrucciones de bifurcaci\'{o}n
+pueden ser condicionales o incondicionales. Por ejemplo:
+
+\begin{verbatim}
+                    is_zero proc
+                    again:
+                        mov ax, 0
+                        je end          ; conditional jump
+                        jmp again       ; unconditional jump
+                    
+                    end:
+                        ret
+                    is_zero endp
+\end{verbatim}
+
+\subsection*{Instrucciones de llamada a procesamiento}
+Las razones principales para utilizar procedimientos son la econom\'{i}a
+y la modularidad. Ya que un procedimiento permite que la misma porci\'{o}n
+de c\'{o}digo se puede reutilizar muchas veces. Tamb\'{i}en estos permiten
+que programas largos, se puedan subdividir en unidades m\'{a}s peque\~{n}as.
+
+\begin{figure}[h]
+    \begin{verbatim}
+                    ; GetMousePosition
+                    ;
+                    ; int 33H
+                    ; ax = 03H
+                    ; bx: button status
+                    ; cx: x position
+                    ; dx: y position
+                    ;
+                    GetMousePosition proc far
+                    mov ax, 03H
+                    int 33H
+                    mov [mouseX], cx
+                    mov [mouseY], dx
+                    mov [mouseStatus], bx
+                    ret
+                    GetMousePosition endp
+                    
+                    ; SetMousePosition
+                    ;
+                    ; int 10H
+                    ; ax = 02H
+                    ; bx = 00H
+                    ; dh = x position
+                    ; dl = y position
+                    ;
+                    SetMousePosition proc far
+                    mov ah, 02H
+                    mov bh, 00H
+                    int 10H
+                    ret
+                    SetMousePosition endp
+    \end{verbatim}
+    \caption{Ejemplo de procedimientos en ensamblador.}
+\end{figure}
+
+Es importante entender que el uso de procedimientos requiere de 
+dos instrucciones b\'{a}sicas, \textbf{call}, que produce la bifurcaci\'{o}n.
+\textbf{ret}, instrucci\'{o}n de retorno. El CPU debe de guardar la direcci\'{o}n
+de retorno, puede estar normalmente en tres lugares, un registro, la pila o
+la principio del procedimiento. Solamente que tiene el limitante que no puede
+hacer uso de procedimientos reentrantes, en otras palabras. \textbf{Procedimientos 
+recursivos.}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{stack_procedures.png}
+    \caption{Uso de la pila.
+    \cite {stallings2006organización}}
+\end{figure}
+
+\subsection*{C\'{o}digos de condici\'{o}n}
+Son bits de reigstros especiales que pueden ser activados por ciertas
+operaciones, y ser utilizados en bifurcaciones condicionales.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{condition_codes.png}
+    \caption{C\'{o}digos de condici\'{o}n.
+    \cite {stallings2006organización}}
+\end{figure}
+
+\bibliography{stallings}
+\bibliographystyle{plain}
+
+\end{document}

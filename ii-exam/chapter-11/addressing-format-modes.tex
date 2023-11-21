@@ -1,0 +1,389 @@
+\documentclass{article}
+\usepackage[a4paper, hmargin=1.4in, vmargin=1in]{geometry}
+\usepackage{graphicx}
+
+\title{\LARGE\textbf{Repertorios de Instrucciones: \\ 
+                     Modos de Direccionamiento y Formatos}}
+\author{\large\textit{Daniel Araya Román}}
+\date{}
+
+\begin{document}
+\maketitle
+
+La referencia a un operando en una instrucci\'{o}n contiene o bien
+su valor (inmediato) o una referencia a la direcci\'{o}n del operando.
+Diversos repertorios de instrucciones utilizan diferentes modos de
+direccionamiento, como lo son, direccionamiento directo, indirecto,
+a registro, indirecto con registro, etc.
+
+En el cap\'{i}tulo anterior, se basa en \textit{qu\'{e}} hace una instrucci\'{o}n,
+en este cap\'{i}tulo se aborda en \textit{c\'{o}mo} especificar los operandos
+y las operaciones de las instrucciones. Teniendo en cuenta, como
+\textbf{especificar la direcci\'{o}n de un operando} y
+\textbf{como se organizan los bits de una instrucci\'{o}n para definir
+las direcciones de los operandos y la operaci\'{o}n que realiza la
+instrucci\'{o}n.} \cite{stallings2006organización}
+
+\section*{Modos de Direccionamiento}
+Un concepto importante es el \textbf{campo de direcciones}, el cual
+en un formato de instrucci\'{o}n, puede estar bastatne limitado. Ser\'{i}a
+conveniente poder referenciar un rango elevado de posiciones de memoria
+principal o virtual. Para este motivo, se utlizan los \textbf{modos de
+    direccionamiento}. Implicando compromiso entre el rango de direcciones o
+la flexibilidad de direccionamiento. Como tambi\'{e}n, el n\'{u}mero de
+referencias a memoria y la complejidad  de c\'{a}lculo de las direcciones.
+
+\subsection*{Direccionamiento Inmediato}
+Es la forma m\'{a}s sencilla de direccionamiento, en el que el operando est\'{a}
+presente en la propia instrucci\'{o}n.
+\begin{verbatim}
+                                Operand = A
+                                mov ax, 05H
+\end{verbatim}
+
+Se puede utilizar para definir constantes, o fijar valores iniciales de variables.
+Naturalmente, el n\'{u}mero se almacena en complemento a dos. La \textbf{ventaja}
+es que una vez captada la instrucci\'{o}n, no requiere de una referencia a
+memoria paraobtener el operando, ahorrando un ciclo de memoria o cach\'{e},
+en el ciclo de instrucci\'{o}n. La \textbf{desventaja} es que el tama\~{n}o
+del n\'{u}mero est\'{a} restringido a la longitud del
+\textbf{campo de direcciones}. Este en la mayor\'{i}a de los repertorios de
+instrucciones es peque\~{n}o comparado a una longitud de palabra (16 bits).
+
+\subsection*{Direccionamiento Directo}
+Otra forma sencilla de direccionamiento, en el que el campo de direcciones
+contiene la direcci\'{o}n efectiva del operando.
+\begin{verbatim}
+                        EfectiveAddress = A
+                        message db 'Hola, mundo!', '$'
+                        mov dx, offset message
+\end{verbatim}
+
+La \textbf{ventaja} es que solamente requiere una referencia a memoria, la
+\textbf{desventaja} es que proporciona un espacio de direcciones limitado.
+
+\subsection*{Direccionamiento Indirecto}
+El problema del direccionamiento directo es que la longitud del campo de
+direcciones es normalmente menor que la longitud de palabra, limitando el
+rango de direcciones. El direccionamiento indirecto permite que el campo de
+direcciones referencie la direcci\'{o}n de una palabra de memoria. La cual
+contiene la direcci\'{o}n completa del operando.
+\begin{verbatim}
+                        EfectiveAddress = [A]
+                        message db 'Hola, mundo!', '$'
+                        mov ax, message
+                        mov dx, [ax]
+\end{verbatim}
+
+La \textbf{ventaja} obvia es que para una longitud de palabra de \textit{n bits},
+se dispone ahora de un espacio de direcciones de \textit{$2^n$}. La
+\textbf{desventaja} es que la ejecuci\'{o}n de la instrucci\'{o}n requiere de dos
+referencias a memoria, una para obtener la direcci\'{o}n del operando y otra para
+obtener el operando en s\'{i}. Una variante del direccionamiento indirecto
+poco com\'{u}n es el direccionamiento indirecto multinivel, o en cascada.
+\begin{verbatim}
+                        EfectiveAddress = [...[A]...]
+                        message db 'Hola, mundo!', '$'
+                        mov ax, message
+                        mov bx, [ax]
+                        mov dx, [bx]
+\end{verbatim}
+
+No ofrece ninguna ventaja particular, y la desventaja es que requiere de
+dos o m\'{a}s referencias a memoria para obtener el operando.
+
+\subsection*{Direccionamiento a Registro}
+Es an\'{a}logo al direccionamiento directo, la diferencia es que el campo de
+direcciones referencia un registro en lugar de una direcci\'{o}n de memoria
+principal.
+
+\begin{verbatim}
+                        EfectiveAddress = R
+                        .model small
+                        .data
+                            value1 dw 10
+                            value2 dw 20
+                            result dw ?
+
+                        .code
+                        main proc
+                            mov ax, value1
+                            add ax, value2
+                            mov result, ax
+
+                            mov ah, 4Ch
+                            int 21h
+                        main endp
+                        end main
+\end{verbatim}
+
+Las \textbf{ventajas} son que solo es necesario un campo peque\~{n}o de
+direcciones en la instrucci\'{o}n, y que no se requieren referencias a memoria.
+Siendo el tiempo de acceso a un registro interno es mucho menor que para la
+memoria principal. Las \textbf{desventajas} es que el espacio de direcciones
+es limitado y que el n\'{u}mero de registros es limitado.
+
+Si se hace un uso masivo del direccionamiento a registros en un repertorio de
+instrucciones, los registros del procesador se emplear\'{a}n intensamente.
+Depende del programador decidir qu\'{e} valores deben mantenerse en registros
+y cu\'{a}les deben almacenarse en memoria principal. La mayor\'{i}a de los
+procesadores modernos emplean m\'{u}ltiples registros de uso general, cargando
+al programador en lenguaje ensamblador (cuando se desarrolla compiladores,
+por ejemplo) con la responsabilidad de conseguir una ejecuci\'{o}n eficiente.
+
+\subsection*{Direccionamiento Indirecto a Registro}
+Igual que el direccionamiento de registro es an\'{a}logo al direccionamiento
+directo, el direccionamiento indirecto a registro es an\'{a}logo al
+direccionamiento indirecto. La diferencia estriba en si el campo de direcciones
+hace referencia a una posici\'{o}n de memoria principal o a un registro.
+
+\begin{verbatim}
+                        EfectiveAddress = [R]
+                        .model small
+                        .data
+                            value       dw 10
+                            value_ptr   dw offset value
+                            result      dw ?
+
+                        .code
+                        main proc
+                            mov ax, value_ptr
+                            mov ax, [ax]
+                            add ax, 5
+                            mov result, ax
+
+                            mov ah, 4Ch
+                            int 21h
+                        main endp
+                        end main
+\end{verbatim}
+
+Las \textbf{ventajas} y limitaciones son las mismas que para el direccionamiento
+indirecto. Em ambos casos la limitaci\'{o}n es que el campo de direcciones,
+se supera haciendo que dicho campo referencie una posici\'{o}n de memoria
+que contenga la direcci\'{o}n del operando. Adem\'{a}s, el direccionamiento
+indirecto a registro requiere de una referencia menos a memoria para
+obtener el operando.
+
+\subsection*{Direccionamiento con Desplazamiento}
+Un modo de direccionamiento que combina las posibilidades de los direccionamientos
+directo e indirecto con registro.
+\begin{verbatim}
+                        EfectiveAddress = A + (R)
+                        .model small
+                        .data
+                            array   dw 1, 2, 3, 4, 5
+                            index   dw 2
+                            result  dw ?
+
+                        .code
+                        main proc
+                            mov ax, index
+                            mov bx, offset array
+
+                            mov cx, 2
+                            mov ax, [bx + ax * cx]
+                            mov result, ax
+
+                            mov ah, 4Ch
+                            int 21h
+                        main endp
+                        end main
+    
+\end{verbatim}
+
+Requiere que tenga dos campos de direcciones, al menos uno de los cuales
+es expl\'{i}cito. El valor contenido en uno de los campos de direcciones
+se utiliza directamente (valor = A), el otro campo de direcciones, o una
+referencia impl\'{i}cita, se refiere a un registro (valor = R), cuyo contenido
+se suma a A para obtener la direcci\'{o}n efectiva del operando. Los tres usos
+m\'{a}s comunes de este modo de direccionamiento son:
+
+\begin{itemize}
+    \item \textbf{Desplazamiento base.}
+          El registro referenciado contiene una direcci\'{o}n de memoria, y
+          el campo de direcci\'{o}n contiene un desplazamiento desde esa
+          direcci\'{o}n base. Siendo la referencia expl\'{i}cita o impl\'{i}cita.
+    \item \textbf{Desplazamiento indexado.}
+          El campo de direcci\'{o}n referencia una direcci\'{o}n de memoria,
+          y el registro referenciado contiene un desplazamiento positivo desde
+          esa direcci\'{o}n. Obs\'{e}rvese que es justo lo opuesto de la
+          interpretaci\'{o}n del desplazamiento base. Puede ser preindexado o
+          postindexado.
+    \item \textbf{Desplazamiento relativo.}
+          Tambi\'{e}n llamado direccionamiento relativo al PC, el registro
+          referenciado impl\'{i}citamente es el contador de programa (PC).
+          La direcci\'{o}n de la instrucci\'{o}n actual se suma al campo de
+          direcciones para obtener la direcci\'{o}n efectiva del operando.
+\end{itemize}
+
+\subsection*{Direccionamiento de Pila}
+La pila tiene un puntero asociado, cuya valor es la direcci\'{o}n de la cabecera
+o tope de la pila. Este puntero se mantiene en un registro, el cual se denomina
+\textbf{Stack Pointer (SP)}. El direccionamiento de pila es un caso especial,
+porque las referencias a posiciones de la pila en memoria son, de hecho,
+direcciones de acceso indirecto con registro. El modo de direccionamiento de
+pila es una forma de direccionamiento impl\'{i}cito. Las instrucciones m\'{a}quina
+no necesitan incluir la referencia a memoria, sino que se operan con la cabecera
+de la pila.
+
+\section*{Modos de direccionamiento del Pentium}
+El mecanismo de traducci\'{o}n de direcciones del Pentium produce una direcci\'{o}n
+denominada virtual o efectiva, que es un desplazamiento dentro de un segmento.
+La suma de la direcci\'{o}n de comienzo del segmento y la direcci\'{o}n efectiva
+produce una \textbf{direcci\'{o}n lineal.}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=4.5in]{pentium_addressing_modes.png}
+    \caption{Modos de direccionamiento del Pentium
+        \cite{stallings2006organización}}
+    \label{fig:modos-direccionamiento-pentium}
+\end{figure}
+
+El pentium contiene seis registros de segmento, cada uno de los cuales contiene
+la direcci\'{o}n de comienzo de un segmento. Adem\'{a}s de dos registros que
+pueden emplearse para construir una direcci\'{o}n, el \textbf{registro base (BX)}
+y el \textbf{registro \'{i}ndice (SI)}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.47]{pentium_addressing_modes2.png}
+    \caption{Modos de direccionamiento del Pentium
+        \cite{stallings2006organización}}
+    \label{fig:modos-direccionamiento-powerpc}
+\end{figure}
+
+\section*{Formatos de Instrucciones}
+Un formato de instrucciones define la descripci\'{o}n en bits de una instrucci\'{o}n.
+Debe de incluir un \textbf{c\'{o}digo de operaci\'{o}n (codop)}, e incluir
+cero o m\'{a}s operandos. Cada operando expl\'{i}cito se referencia utlizando
+uno de los \textbf{modos de direccionamiento}. En la mayor\'{i}a de los repertorios
+de instrucciones se emplean m\'{a}s de un formato de instrucci\'{o}n.
+
+\subsection*{Longitud de Instrucci\'{o}n}
+El aspecto m\'{a}s b\'{a}sico a considerar es la longitud de la instrucci\'{o}n.
+Afecta y se ve afectada por el tama\~{n}o de la memoria, su organizaci\'{o}n,
+la estructura de buses, la complejidad del procesador y la velocidad del mismo.
+Esta decisi\'{o}n define la riqueza y la flexibilidad de la m\'{a}quina desde un
+punto de vista del programador en lenguaje ensamblador.
+
+El programador desea m\'{a}s \textit{codops}, m\'{a}s operandos, m\'{a}s modos de
+direccionamiento y mayor rango de direcciones. Todo esto requiere de bits, y
+empuja hacia longitudes de instrucci\'{o}n mayores. No obstante una instrucci\'{o}n
+mayor puede ser improcedente. \textbf{No porque una instrucci\'{o}n de 64 bits ocupe el
+doble de espacio que una de 32 bits, significa que sea el doble de \'{u}til.}
+La longitud de palabra de memoria, \textbf{(16 bits)}, es, en cierto sentido, la unidad natural de
+organizaci\'{o}n.
+
+\subsection*{Asignaci\'{o}n de los Bits}
+Un aspecto igualmente dif\'{i}cil es c\'{o}mo asignar los bits en un formato de
+instrucci\'{o}n. Para una longitud de instrucci\'{o}n dada, existe un compromiso
+entre el n\'{u}mero de \textit{codops} y la capacidad de direccionamiento. Un
+mayor n\'{u}mero de \textit{codops} implica m\'{a}s bits en el campo de codop.
+Reduciendo el n\'{u}mero de bits disponibles para direccionamiento. Los siguientes
+factores influyen en la asignaci\'{o}n de bits:
+
+\begin{itemize}
+    \item \textbf{N\'{u}mero de modos de direccionamiento.}
+          Pueden a veces indicarse de forma impl\'{i}cita. En otros casos,
+          deben de especificarse expl\'{i}citamente. requiriendo uno o m\'{a}s
+          bits de modo.
+    \item \textbf{N\'{u}mero de operandos.}
+          Las instrucciones t\'{i}picas de las m\'{a}quinas actuales permiten
+          dos operandos. Cada direcci\'{o}n de operando podr\'{i}a requerir de un
+          indicador de modo dentro de la instrucci\'{o}n.
+    \item \textbf{Registros frente a memoria.}
+          Una m\'{a}quina debe de disponer de registros para traer datos al
+          procesador a fin de procesarlos. En el caso de solo tener un registro
+          visible (el acumulador), la direcci\'{o}n del operando est\'{a}
+          impl\'{i}cita y no consume bits. Incluso con varios registros, se ocupan
+          pocos bits para especificar el registro. Normalmente se disponen de
+          8 a 32 registros visibles para el usuario.
+    \item \textbf{N\'{u}mero de conjuntos de registros.}
+          Distintas m\'{a}quinas tienen un conjunto de registros de uso general,
+          entre 8 y 16 registros. Una ventaja que ofrece este enfoque es que,
+          requiere menos bits por instrucci\'{o}n. As\'{i} el codop determina
+          de forma impl\'{i}cita qu\'{e} conjunto de registros se est\'{a}
+          referenciando.
+    \item \textbf{Rango de direcciones.}
+          Para referencias a memoria, este rango est\'{a} relacionado con el
+          n\'{u}mero de bits disponibles para direccionamiento. Dado que esto
+          impone limitaciones, rara vez se utiliza el direccionamiento directo,
+          normalmente se emplea el direccionamiento con desplazamiento.
+    \item \textbf{Granularidad de las direcciones.}
+          Para direcciones referenciando a memoria en lugar de registros, otro factor
+          que afecta es su granularidad de direccionamiento. El direccionamiento por
+          bytes es conveniente manipular caracteres pero requiere, para un tama\~{n}o
+          de memoria dado, m\'{a}s bits de direcci\'{o}n.
+\end{itemize}
+
+\subsection*{PDP-8}
+Un dise\~{n}o sencillo para un computador de uso general fue el del PDP-8.
+Este utiliza instrucciones de 12 bits, opera con palabras de 12 bits, y solo
+tiene un registro de uso general, el acumulador. El formato de instrucci\'{o}n
+del PDP-8 es bastante eficiente. Permite direccionamiento indirecto, direccionamiento
+con desplazamiento, e indexado. Dispone de un total de 35 instrucciones.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.4]{pdp-8.png}
+    \caption{Formato de instrucciones del PDP-8
+        \cite{stallings2006organización}}
+    \label{fig:formato-instruccion-pdp8}
+\end{figure}
+
+\subsection*{PDP-10}
+Tiene una longitud de instrucci\'{o}n de 36 bits, y una longitud de palabra de
+36 bits. Permite 512 operaciones, con 365 instrucciones diferentes. Con 16
+registros de uso general.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.4]{pdp-10.png}
+    \caption{Formato de instrucci\'{o}n del PDP-10
+    \cite{stallings2006organización}}
+    \label{fig:formato-instruccion-pdp10}
+\end{figure}
+
+
+\subsection*{Instrucciones de Longitud Variable: PDP-11}
+El PDP-11 se dise\~{n}\'{o} para proporcinar un repertorio de instrucciones
+flexible dentro de las limitaciones de un microprograma de 16 bits. Este emplea
+8 registros de uso general de 16 bits, teniendo punteros de pila. Una ventaja
+que posee es el modo de direccionamiento con operando, en lugar de con el codop.
+Esta independencia se denomina \textit{ortogonalidad}. Tiene 13 formatos de
+instrucci\'{o}n diferentes, con una longitud de instrucci\'{o}n de 16 bits.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.38]{pdp-11.png}
+    \caption{Formatos de instrucciones del PDP-11
+        \cite{stallings2006organización}}
+    \label{fig:formato-instruccion-pdp11}
+\end{figure}
+
+\newpage
+\subsection*{Formatos de instrucci\'{o}n del Pentium}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.4]{pentium_instruction_format.png}
+    \caption{Formatos de instrucci\'{o}n del Pentium
+    \cite{stallings2006organización}}
+    \label{fig:formato-instruccion-pentium}
+\end{figure}
+
+
+\bibliography{stallings}
+\bibliographystyle{plain}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=4in]{addresing_modes.png}
+    \caption{Modos de direccionamiento
+        \cite{stallings2006organización}}
+    \label{fig:modos-direccionamiento}
+\end{figure}
+
+\end{document}

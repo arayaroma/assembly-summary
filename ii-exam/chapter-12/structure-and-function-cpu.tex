@@ -1,0 +1,343 @@
+\documentclass{article} 
+\usepackage[a4paper, hmargin=1.4in,vmargin=1in]{geometry} 
+\usepackage{graphicx}
+
+\title{\LARGE\textbf{Estructura y Función del Procesador}} 
+\author{\large\textit{Daniel Araya Román}} 
+\date{}
+
+\begin{document}
+\maketitle
+
+Un procesador incluye tanto registros visibles por el usuario, como registros
+de control/estado. Los primeros se pueden referenciar de manera impl\'{i}cita o
+expl\'{i}cita, en instrucciones m\'{a}quina. \\
+
+Pueden ser de uso general o tener
+utilidades especiales. Los seguntos se usan en conjunto a la unidad de control (UC),
+para controlar el funcionamiento del procesador. Por ejemplo el contador de
+programa (PC). \textbf{La palabra de estado del programa}
+\textit{(program word status, PSW)}. Continendo bits de estado y de
+condici\'{o}n, siendo estos el resultado m\'{a}s reciente de la
+operaci\'{o}n aritm\'{e}tica realizada. Como tambi\'{e}n bits de inidicador,
+para saber si el procesador est\'{a} en estado supervisor o usuario. \\
+
+Los procesadores tambi\'{e}n utiliza una t\'{e}cnica conocida como segmentaci\'{o}n
+de instrucciones \textit{(instruction pipelining)}, que permite que el procesador
+dividir en un cauce el ciclo de instrucci\'{o}n, realizando varias etapas de manera
+paralela. No obstante los saltos condicionales complican la segmentaci\'{o}n. Como
+el uso de cauces segmentados.
+
+\subsection*{Organización del Procesador}
+\begin{itemize}
+      \item \textbf{Captaci\'{o}n de instrucci\'{o}n.}
+            El procesador lee una instrucci\'{o}n de memoria (registro, cach\'{e}, o
+            memoria principal).
+      \item \textbf{Decodificaci\'{o}n de instrucci\'{o}n.}
+            La instrucci\'{o}n se decodifica para determinar que acci\'{o}n debe
+            de realizar.
+      \item  \textbf{Captaci\'{o}n de operandos.}
+            La instrucci\'{o}n puede exigir leer datos de la memoria o un m\'{o}dulo
+            de entrada/salida.
+      \item \textbf{Procesamiento de datos.}
+            La ejecuci\'{o}n de una instrucci\'{o}n puede exigir una operaci\'{o}n
+            aritm\'{e}tica o l\'{o}gica.
+      \item \textbf{Escritura de operando.}
+            Los resultados de la operaci\'{o}n se escriben en memoria o en un
+            m\'{o}dulo de entrada/salida.
+\end{itemize}
+
+\subsubsection*{Etapas del Ciclo de Instrucci\'{o}n}
+\begin{center}
+      \textit{Instruction Fetch, Instruction Decode, Operands Fetch, Execution,
+            Operand Write.}
+\end{center}
+\newpage
+Para que el procesador pueda realizar todas estas etapas, debe de tener una memoria
+interna donde almacenar datos de manera temporal. Recordar la \'{u}ltima instrucci\'{o}n
+ejecutada, para que pueda saber donde debe de buscar la siguiente instrucci\'{o}n.
+En la siguiente figura se indican los caminos de transferencia de datos y de la l\'{o}gica
+de control. Todo esto conectado con el bus interno del procesador. Este es necesario
+para poder transferir datos entre los diversos registros y la ALU. Ya que esta s\'{o}lo
+opera con datos de la memoria interna del procesador.
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.4]{internal_cpu.png}
+      \caption{Estructura Interna de un Procesador.
+            \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-1}
+\end{figure}
+
+\subsection*{Organizaci\'{o}n de los Registros}
+Existen dos tipos principales de registros del procesador.
+
+\begin{itemize}
+      \item \textbf{Registros Visibles por el Usuario.}
+            Permiten al programador de lenguaje m\'{a}quina o ensamblador minimizar
+            las referencias a memoria principal. Por medio de la optimizaci\'{o}n del
+            uso de los mismos.
+      \item \textbf{Registros de Control y Estado.}
+            Son utilizados por la \textbf{unidad de control}, para controlar el
+            funcionamiento del procesador y por programas privilegiados del sistema
+            operativo. Como motivo de control de ejecuci\'{o}n de programas de usuario.
+\end{itemize}
+
+\subsection*{Registros Visibles por el Usuario}
+Se pueden clasificar en las distintas categor\'{i}as.
+\begin{itemize}
+      \item \textbf{Registros de uso general.}
+            Se pueden ser asignados por el programador a diversas funciones.
+            En algunos casos pueden utilizarse para funciones de direccionamiento.
+            En otros casos hay una separaci\'{o}n parcial entre los registros de
+            datos y de direcciones.
+      \item \textbf{Registros de datos.}
+            Pueden usarse \'{u}nicamente para contener datos y no pueden emplear
+            en el c\'{a}lculo de la direcci\'{o}n de un operando.
+      \item \textbf{Registros de direcciones.}
+            Pueden ser de uso general, o pueden estar dedicados a un modo de
+            direccionamiento particular. Por ejemplo.
+            \begin{itemize}
+                  \item \textbf{Registros de segmento.}
+                        En una m\'{a}quina con direccionamiento segmentado,
+                        este registro contiene la direcci\'{o}n de la base del
+                        segmento. Pueden existir m\'{u}ltiples registros.
+                  \item \textbf{Registros \'{i}ndice.}
+                        Se usan para direccionamiento indexado. Pueden ser autoindexados.
+                  \item \textbf{Registros de pila.}
+                        Normalmente hay un registro dedicado que apunta a la cabecera
+                        de la pila. Permitiendo el direccionamiento impl\'{i}cito.
+                        Por lo que las instrucciones de pila no necesitan contener un
+                        operando expl\'{i}cito referente a ella.
+            \end{itemize}
+      \item \textbf{Registros de c\'{o}digos de condici\'{o}n.}
+            Tambien conocidos como \textbf{banderas}. Son bits fijados por el
+            hardware del procesador como resultado de una operaci\'{o}n aritm\'{e}tica
+            o l\'{o}gica. Se agrupan en uno o m\'{a}s registros y normalmente forman parte
+            de un registro de control. \textbf{El programador no puede alterarlos.}
+\end{itemize}
+
+Algunos procesadores como el Itanium (IA-64), o procesadores MIPS, no utilizan
+c\'{o}digos de condici\'{o}n en lo absoluto.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.4]{condition_flags.png}
+      \caption{C\'{o}digos de Condici\'{o}n.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-2}
+\end{figure}
+
+\subsection*{Registros de Control y de Estado}
+La mayor\'{i}a de estos registros, no son visibles por el usuario. Naturalmente
+distintas m\'{a}quinas tendr\'{a}n distintas organizaciones de registros y
+usar\'{a}n distinta terminolog\'{i}a. Algunos de estos registros son.
+
+\begin{itemize}
+      \item \textbf{Contador de Programa (Program Counter,PC).}
+            Contiene la direcci\'{o}n de la instrucci\'{o}n a captar.
+      \item \textbf{Registro de Instrucci\'{o}n (Instruction Register, IR).}
+            Contiene la instrucci\'{o}n m\'{a}s recientemente captada.
+      \item \textbf{Registro de direcci\'{o}n de Memoria (Memory Address Register, MAR).}
+            Contiene la direcci\'{o}n de una posici\'{o}n de memoria.
+      \item \textbf{Registro de datos de Memoria (Memory Data Register, MDR).}
+            Contiene un dato a escribir en memoria o el dato m\'{a}s recientemente
+            le\'{i}do de memoria.
+\end{itemize}
+
+Es necesario un mecanismo de almacenamiento intermedio el cual se d\'{e} salida a
+los bits que van a ser transferidos por el bus del sistema y se almacenen temporalmente
+los bits le\'{i}dos del bus de datos.
+
+\subsubsection*{Ejemplo de organizaci\'{o}n de registros}
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{register_organization.png}
+      \caption{Organizaci\'{o}n de Registros.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-3}
+\end{figure}
+
+\subsection*{Ciclo de Instrucci\'{o}n}
+El ciclo de instrucci\'{o}n se puede dividir en distintos subciclos. Captaci\'{o}n,
+ejecuci\'{o}n y interrupci\'{o}n.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{instruction_cycle.png}
+      \caption{Ciclo de Instrucci\'{o}n.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-4}
+\end{figure}
+
+\subsubsection*{Ciclo de captaci\'{o}n}
+Se lee una instrucci\'{o}n de memoria. El PC contiene la direcci\'{o}n de la
+siguiente instrucci\'{o}n a captar. Esta se transfiere a MAR, y se coloca en el
+bus de direcciones. La unidad de control solicita una lectura de memoria, y el
+resultado se pone en el bus de datos, se copia en MDR y luego se lleva al IR.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{fetch_cycle.png}
+      \caption{Ciclo de Captaci\'{o}n.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-5}
+\end{figure}
+
+\subsubsection*{Ciclo indirecto}
+La ejecuci\'{o}n de una instrucci\'{o}n puede involucrar a uno o m\'{a}s operandos
+de memoria, cada uno de estos requiere un acceso a memoria. Si se usa el direccionamiento
+indirecto, ser\'{a}n necesarios dos accesos a memoria adicionales.
+
+Despu\'{e}s que una instrucci\'{o}n es captada, es examinada para determinar si
+incluye alg\'{u}n direccionamiento indirecto. Si es as\'{i}, se captan los operandos
+usando el direccionamiento indirecto. De igual manera se puede procesar una
+interrupci\'{o}n antes de la captaci\'{o}n de la siguiente instrucci\'{o}n.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{indirect_cycle.png}
+      \caption{Ciclo Indirecto.
+            \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-6}
+\end{figure}
+
+Una vez se concluye el ciclo de captaci\'{o}n, la unidad de control examina el contenido
+de IR para determinar si contiene un campo de operando que use direccionamiento indirecto.
+Si es as\'{i}, se produce un ciclo indirecto. Los $n$ bits, m\'{a}s significativos del
+de MDR, que contienen la direcci\'{o}n de memoria, se transfieren al MAR.
+
+\subsubsection*{Ciclo de interrupci\'{o}n}
+Como los ciclos de captaci\'{o}n e indirecto, el ciclo de interrupci\'{o}n es
+simple y predecible. El contenido actual del PC se guarda para que el procesador
+pueda reanudar su actividad despu\'{e}s de la interrupci\'{o}n. As\'{i} el contenido
+de PC se transfiere a MDR para ser escrito en memoria. La direcci\'{o}n de memoria
+especial reservada para este prop\'{o}sito se carga en MAR desde la unidad de control.
+PC se carga con la direcci\'{o}n de la rutina de servicio de interrupci\'{o}n. Y el
+siguiente ciclo de instrucci\'{o}n comienza captando la instrucci\'{o}n oportuna.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{interrupt_cycle.png}
+      \caption{Ciclo de Interrupci\'{o}n.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-7}
+\end{figure}
+
+\subsubsection*{Ciclo de ejecuci\'{o}n}
+Puede tomar diversas formas, ya que depende de las instrucciones m\'{a}quina en el
+IR. Puede implicar transferencias de datos entre registros, lectura o escritura de
+memoria o entrada/salida, o incluso la utilizaci\'{o}n de la ALU.
+
+\subsection*{Diagrama de estados del ciclo de instrucci\'{o}n}
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.45]{instruction_cycle_state_diagram.png}
+      \caption{Diagrama de Estados del Ciclo de Instrucci\'{o}n.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-8}
+\end{figure}
+
+\subsection*{Segmentaci\'{o}n de Instrucciones}
+A medida que los computadores evolucionan, se pueden conseguir mayores prestaciones
+aprovechando los progresos de la tecnolog\'{i}a. Como por ejemplo, uso de m\'{u}ltiples
+registros, la implementaci\'{o}n de una memoria cach\'{e}, o la segmentaci\'{o}n de
+instrucciones.
+
+\subsubsection*{Estrategia de segmentaci\'{o}n}
+Piense en una f\'{a}brica de montaje de autom\'{o}viles. Una cadena de montaje
+saca partido del hecho que el producto pasa a trav\'{e}s de distintas etapas
+de producci\'{o}n. Logrando trabajar sobre los productos en varias etapas
+simult\'{a}neamente. Esto se conoce como \textbf{segmentaci\'{o}n de cauce (pipelining)}.
+Hay que entender que una instrucci\'{o}n por naturaleza tiene varias etapas.
+En el x86, se pueden distinguir 6 etapas.
+
+\subsubsection*{Etapas de una instrucci\'{o}n}
+\begin{itemize}
+      \item \textbf{Captaci\'{o}n de instrucci\'{o}n (Fetch Instruction, FI).}
+            Leer la supuesta siguiente instrucci\'{o}n en un buffer.
+
+      \item \textbf{Decodificaci\'{o}n de instrucci\'{o}n (Decode Instruction, DI).}
+            Decodificar la instrucci\'{o}n y determinar que operaci\'{o}n se debe
+            realizar, y los campos de operando.
+
+      \item \textbf{Captaci\'{o}n de operandos (Fetch Operands, FO).}
+            Calcular la direcci\'{o}n efectiva de cada operando. Involucrando
+            distinto tipos de direccionamiento.
+
+      \item \textbf{Ejecuci\'{o}n de instrucci\'{o}n (Execute Instrucion, EI).}
+            Realizar la operaci\'{o}n indicada y almacenar el resultado.
+
+      \item \textbf{Escritura de operandos (Write Operands, WO).}
+            Almacenar el resultado en el lugar apropiado.
+\end{itemize}
+
+\subsubsection*{Etapas de una instrucci\'{o}n deseado}
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{pipeline.png}
+      \caption{Etapas de una Instrucci\'{o}n.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-9}
+\end{figure}
+\newpage
+
+\subsubsection*{Etapas de una instrucci\'{o}n con penalizaci\'{o}n de salto}
+\begin{figure}[ht]
+      \centering
+      \includegraphics[scale=0.5]{pipeline2.png}
+      \caption{Etapas de una Instrucci\'{o}n con Penalizaci\'{o}n de Salto.
+      \cite{stallings2006organización}}
+      \label{fig:structure-and-function-cpu-10}
+\end{figure}
+
+\subsection*{Tratamiento de Saltos}
+Los saltos condicionales son unos de los mayores problemas de dise\~{n}o de
+un cauce de instrucciones. Hasta que la instrucci\'{o}n no se ejecuta realmente,
+es imposible determinar si se debe de saltar o no. Por lo que se han creado
+aproximaciones para tratar este problema.
+
+\begin{itemize}
+      \subsubsection*{Tipo est\'{a}tico}
+      \item \textbf{Flujos m\'{u}ltiples.}
+            Se ejecutan ambas ramas del salto, y se descarta el resultado de
+            la rama que no se debe de ejecutar. Esto es muy costoso, ya que
+            se desperdicia tiempo accediendo a memoria o a registros, e incluso
+            en el cauce puede haber instrucciones de salto adicionales.
+      \item \textbf{Precaptar el destino del salto.}
+            Precapta la direcci\'{o}n de la instrucci\'{o}n a la que se debe de
+            saltar.
+      \item \textbf{Buffer de bucles.}
+            Pensandolo de manera an\'{a}loga es como una cach\'{e}, sin embargo
+            est\'{a} limitada por el espacio. Elimina la penalizaci\'{o}n de los
+            accesos a memoria, ya que las instrucciones son captadas solamente
+            una vez de memoria. Aparte de que solo puede guardar instrucciones
+            consecutivas.
+
+            \subsubsection*{Tipo din\'{a}mico}
+      \item \textbf{Predicci\'{o}n de saltos.}
+            Se usa un predictor de saltos, que se basa en el historial de saltos
+            para predecir si se debe de saltar o no. Si se predice correctamente
+            se evita la penalizaci\'{o}n, pero si se predice incorrectamente se
+            debe de penalizar.
+      \item \textbf{Salto retardado.}
+            Las instrucciones de salto tienen lugar despu\'{e}s de lo realmente
+            deseado, llenar el cauce.
+\end{itemize}
+
+\subsection*{Procesamiento de Interrupciones}
+Es un servicio que se proporciona para apoyar al sistema operativo en cuesti\'{o}n.
+Permite que la aplicaci\'{o}n de un programa sea suspendido temporalmente, para
+que el sistema operativo pueda realizar una tarea. Para luego ser reanudado. 
+
+Hay dos tipos de eventos que suspende la ejecuci\'{o}n de flujo de instrucciones
+en curso. \textbf{Interrupciones.}
+Se generan por una se\~{n}al del hardware y puede ocurrir en momentos impredecibles
+durante la ejecuci\'{o}n de un programa.
+Por otra parte las \textbf{Excepciones}.
+Se generan por una se\~{n}al del software y es provocada por la ejecuci\'{o}n de
+una instrucci\'{o}n.
+
+
+\bibliography{stallings}
+\bibliographystyle{plain}
+\end{document}
